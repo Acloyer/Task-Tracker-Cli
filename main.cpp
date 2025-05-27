@@ -129,6 +129,17 @@ int main(int argc, char* argv[]) {
     string command = argv[1];
     if (command == "add" && argc >= 3) {
         addTask(argv[2]);
+    } else if (command == "update" && argc >= 4) {
+        updateTask(stoi(argv[2]), argv[3]);
+    } else if (command == "delete" && argc >= 3) {
+        deleteTask(stoi(argv[2]));
+    } else if (command == "mark-done" && argc >= 3) {
+        markStatus(stoi(argv[2]), "done");
+    } else if (command == "mark-in-progress" && argc >= 3) {
+        markStatus(stoi(argv[2]), "in-progress");
+    } else if (command == "list") {
+        if (argc == 2) listTasks();
+        else listTasks(argv[2]);
     } else {
         cout << "Unknown command or wrong arguments.\n";
     }
