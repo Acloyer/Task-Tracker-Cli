@@ -74,6 +74,14 @@ void addTask(const string& desc) {
     cout << "Task added successfully (ID: " << t.id << ")\n";
 }
 
+void listTasks(string filter = "") {
+    for (auto& t : tasks) {
+        if (filter.empty() || t.status == filter) {
+            cout << "[" << t.id << "] " << t.description << " (" << t.status << ")\n";
+        }
+    }
+}
+
 int main(int argc, char* argv[]) {
     loadTasks();
     if (argc < 2) {
