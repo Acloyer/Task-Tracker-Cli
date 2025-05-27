@@ -95,6 +95,19 @@ void updateTask(int id, const string& desc) {
     cout << "Task not found.\n";
 }
 
+void markStatus(int id, const string& newStatus) {
+    for (auto& t : tasks) {
+        if (t.id == id) {
+            t.status = newStatus;
+            t.updatedAt = getCurrentTimestamp();
+            saveTasks();
+            cout << "Task marked as " << newStatus << ".\n";
+            return;
+        }
+    }
+    cout << "Task not found.\n";
+}
+
 void deleteTask(int id) {
     auto it = remove_if(tasks.begin(), tasks.end(), [id](Task& t) { return t.id == id; });
     if (it != tasks.end()) {
