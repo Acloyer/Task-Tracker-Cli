@@ -2,6 +2,10 @@
 #include <vector>
 #include <fstream>
 #include <filesystem>
+#include <sstream>
+#include <ctime>
+#include <algorithm>
+
 using namespace std;
 
 struct Task {
@@ -50,13 +54,38 @@ void saveTasks() {
     file.close();
 }
 
-int main() {
-    auto lang = "C++";
-    std::cout << "Hello and welcome to " << lang << "!\n";
+int getNextId() {
+    int maxId = 0;
+    for (auto& t : tasks) {
+        if (t.id > maxId) maxId = t.id;
+    }
+    return maxId + 1;
+}
 
-    for (int i = 1; i <= 5; i++) {
-         std::cout << "i = " << i << std::endl;
+void addTask(const string& desc) {
+    Task t;
+    t.id = getNextId();
+    t.description = desc;
+    t.status = "todo";
+    t.createdAt = getCurrentTimestamp();
+    t.updatedAt = t.createdAt;
+    tasks.push_back(t);
+    saveTasks();
+    cout << "Task added successfully (ID: " << t.id << ")\n";
+}
+
+int main(int argc, char* argv[]) {
+    loadTasks();
+    if (argc < 2) {
+        cout << "Usage: task-cli <command> [args]\n";
+        return 1;
     }
 
+    string command = argv[1];
+    if (command == "add" && argc >= 3) {
+        addTask(argv[2]);
+    } else {
+        cout << "Unknown command or wrong arguments.\n";
+    }
     return 0;
 }
