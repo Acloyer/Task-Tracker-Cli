@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
-
+#include <fstream>
+#include <filesystem>
 using namespace std;
 
 struct Task {
@@ -22,6 +23,33 @@ string getCurrentTimestamp() {
     return str;
 }
 
+void loadTasks() {
+    ifstream file(FILE_NAME);
+    if (!file.is_open()) return;
+    string line;
+    while (getline(file, line)) {
+        if (line.empty()) continue;
+        stringstream ss(line);
+        Task t;
+        getline(ss, line, '|'); t.id = stoi(line);
+        getline(ss, t.description, '|');
+        getline(ss, t.status, '|');
+        getline(ss, t.createdAt, '|');
+        getline(ss, t.updatedAt, '|');
+        tasks.push_back(t);
+    }
+    file.close();
+}
+
+void saveTasks() {
+    ofstream file(FILE_NAME);
+    for (auto& t : tasks) {
+        file << t.id << "|" << t.description << "|" << t.status << "|"
+             << t.createdAt << "|" << t.updatedAt << endl;
+    }
+    file.close();
+}
+
 int main() {
     auto lang = "C++";
     std::cout << "Hello and welcome to " << lang << "!\n";
@@ -31,4 +59,4 @@ int main() {
     }
 
     return 0;
-    }
+}
