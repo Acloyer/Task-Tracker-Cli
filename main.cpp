@@ -82,6 +82,30 @@ void listTasks(string filter = "") {
     }
 }
 
+void updateTask(int id, const string& desc) {
+    for (auto& t : tasks) {
+        if (t.id == id) {
+            t.description = desc;
+            t.updatedAt = getCurrentTimestamp();
+            saveTasks();
+            cout << "Task updated.\n";
+            return;
+        }
+    }
+    cout << "Task not found.\n";
+}
+
+void deleteTask(int id) {
+    auto it = remove_if(tasks.begin(), tasks.end(), [id](Task& t) { return t.id == id; });
+    if (it != tasks.end()) {
+        tasks.erase(it, tasks.end());
+        saveTasks();
+        cout << "Task deleted.\n";
+    } else {
+        cout << "Task not found.\n";
+    }
+}
+
 int main(int argc, char* argv[]) {
     loadTasks();
     if (argc < 2) {
